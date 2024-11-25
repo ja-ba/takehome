@@ -3,10 +3,13 @@ import os
 import requests
 import backoff
 from dsp.utils.settings import settings
+import os
 
 from together import Together
 
+os.environ['TOGETHER_API_KEY'] = ""
 client = Together()
+
 
 ERRORS = Exception
 

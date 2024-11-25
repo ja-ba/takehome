@@ -1,6 +1,7 @@
 from models import ChatMessage, ChatHistory
 import dspy
 from lms.together import Together
+from load_examples import load_examples
 
 from modules.chatter import ChatterModule
 
@@ -18,7 +19,8 @@ lm = Together(
 dspy.settings.configure(lm=lm)
 
 chat_history = ChatHistory()
-chatter = ChatterModule(examples=None)
+# chatter = ChatterModule()
+chatter = ChatterModule(examples=load_examples("training_data/conversations.json"))
 while True:
     # Get user input
     user_input = input("You: ")
@@ -46,4 +48,4 @@ while True:
     print("Response:", response)
     print()
     # uncomment this line to see the 
-    # lm.inspect_history(n=1)
+    lm.inspect_history(n=3)
