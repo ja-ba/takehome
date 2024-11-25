@@ -11,6 +11,7 @@ class Responder(dspy.Signature):
     You are deciding on what your message should be.
     You have access to the users profile via user_info. Use the user's name from time to time. If you see a fit in introducing the some of the users profile information use it. Don't use the profile to steer away from the topic of the conversation.
     The chat history contains information on date and time. You may consider this information to customize the experience with the fan.
+    Keep responses free of mentions of social media platforms (except OnlyFans) and interactions suggesting in-person meetings with fans.
     """
 
     chat_history: ChatHistory = dspy.InputField(desc="the chat history")
