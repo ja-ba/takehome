@@ -2,7 +2,7 @@ import dspy
 from typing import Optional
 
 import os
-from models import ChatHistory
+from models import ChatHistory, UserInfo
 from .responder import ResponderModule
 
 
@@ -18,5 +18,8 @@ class ChatterModule(dspy.Module):
     def forward(
         self,
         chat_history: ChatHistory,
+        user_info: UserInfo
+
     ):
-        return self.responder(chat_history=chat_history)
+        
+        return self.responder(chat_history=chat_history, user_info=user_info)

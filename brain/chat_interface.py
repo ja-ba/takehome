@@ -1,4 +1,4 @@
-from models import ChatMessage, ChatHistory
+from models import ChatMessage, ChatHistory, UserInfo
 import dspy
 from lms.together import Together
 from load_examples import load_examples
@@ -21,6 +21,18 @@ dspy.settings.configure(lm=lm)
 chat_history = ChatHistory()
 # chatter = ChatterModule()
 chatter = ChatterModule(examples=load_examples("training_data/conversations.json"))
+
+print("Before we start, let's get to know you a little more")
+currUser = UserInfo(
+name = input("...What is your name? "),
+location = input("...Where are you located? "),
+age = input("...How old are you? "),
+sex = input("...Which sex do you identify with? "),
+interests = input("...Tell me a little bit more about your interests? ")
+)
+print("""---------------------------------------
+Great, let's get started!
+---------------------------------------""")
 while True:
     # Get user input
     user_input = input("You: ")
@@ -34,7 +46,7 @@ while True:
     )
 
     # Send request to endpoint
-    response = chatter(chat_history=chat_history).output
+    response = chatter(chat_history=chat_history, user_info=currUser).output
 
     # Append response to chat history
     chat_history.messages.append(

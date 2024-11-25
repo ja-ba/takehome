@@ -1,6 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
+
 
 
 class ChatMessage(BaseModel):
@@ -8,7 +10,8 @@ class ChatMessage(BaseModel):
     content: str
 
     def __str__(self):
-        role = "YOU" if self.from_creator else "THE FAN"
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        role = ("YOU" if self.from_creator else "THE FAN") + " (" + time + "):"
         message = role + ": " + self.content
         return message
 
@@ -29,3 +32,10 @@ class ChatHistory(BaseModel):
     
     def model_dump_json(self, **kwargs):
         return str(self)
+    
+class UserInfo(BaseModel):
+    name: str
+    location: str
+    age: str
+    sex: str
+    interests: str

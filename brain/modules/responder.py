@@ -1,7 +1,8 @@
 import dspy
 
 from signatures.responder import Responder
-from models import ChatHistory
+from models import ChatHistory, UserInfo
+from typing import Optional
 
 class ResponderModule(dspy.Module):
     def __init__(self):
@@ -14,7 +15,9 @@ class ResponderModule(dspy.Module):
     def forward(
         self,
         chat_history: dict,
+        user_info: Optional[UserInfo] = None
     ):
         return self.prog(
             chat_history=ChatHistory.parse_obj(chat_history),
+            user_info = UserInfo.parse_obj(user_info) if user_info else None
         )
