@@ -2,8 +2,8 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-
-
+import json
+import os
 
 class ChatMessage(BaseModel):
     from_creator: bool
@@ -17,6 +17,7 @@ class ChatMessage(BaseModel):
 
 class ChatHistory(BaseModel):
     messages: List[ChatMessage] = []
+    user_id: Optional[str] = None
 
     def __str__(self):
         messages = []
@@ -33,7 +34,24 @@ class ChatHistory(BaseModel):
     def model_dump_json(self, **kwargs):
         return str(self)
     
+    def save_history(self) -> bool:
+        if self.user_id:
+            with open(f'chat_histories/{self.user_id}.json', 'w') as f:
+                json.dump([{"from_creator": s.from_creator, "content": s.content} for s in self.messages], f)
+            return True
+        else:
+            return False
+
+    def load_history(self):
+        if self.user_id and os.path.exists(f'chat_histories/{self.user_id}.json'):
+            with open(f'chat_histories/{self.user_id}.json', 'r') as f:
+                self.messages = [ChatMessage(**m) for m in json.load(f)]
+            return True
+        else:
+            return False
+    
 class UserInfo(BaseModel):
+    id : str
     name: str
     location: str
     age: str

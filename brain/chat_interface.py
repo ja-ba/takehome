@@ -18,19 +18,28 @@ lm = Together(
 
 dspy.settings.configure(lm=lm)
 
-chat_history = ChatHistory()
+
 # chatter = ChatterModule()
 chatter = ChatterModule(examples=load_examples("training_data/conversations.json"))
 
 print("Before we start, let's get to know you a little more")
 currUser = UserInfo(
+id = input("...What is your user handle? "),
 name = input("...What is your name? "),
 location = input("...Where are you located? "),
 age = input("...How old are you? "),
 sex = input("...Which sex do you identify with? "),
 interests = input("...Tell me a little bit more about your interests? ")
 )
-print("""---------------------------------------
+
+chat_history = ChatHistory()
+chat_history.user_id = currUser.id
+if chat_history.load_history():
+    print(f"""---------------------------------------
+Hey, welcome back {currUser.name}!
+---------------------------------------""")
+else:
+    print("""---------------------------------------
 Great, let's get started!
 ---------------------------------------""")
 while True:
@@ -55,6 +64,7 @@ while True:
             content=response,
         ),
     )
+    chat_history.save_history()
     # Print response
     print()
     print("Response:", response)
